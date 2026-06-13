@@ -16,6 +16,7 @@
         <module>saa_05_chat_memory01</module>
         <module>saa_06_chat_memory02</module>
         <module>saa_07_text2image</module>
+        <module>saa_08_embedding</module>
     </modules>
 
     <properties>
