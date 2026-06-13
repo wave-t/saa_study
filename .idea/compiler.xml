@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="saa_07_text2image" />
+        <module name="saa_03_chatclient_demo" />
+        <module name="saa_05_chat_memory01" />
+        <module name="saa_04_prompt_demo" />
+        <module name="saa_02_ollama_demo" />
+        <module name="saa_01_quickly" />
+        <module name="saa_06_chat_memory02" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="saa_01_quickly" options="" />
+    </option>
+  </component>
+</project>
