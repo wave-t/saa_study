@@ -9,7 +9,13 @@ import io.milvus.v2.common.IndexParam;
 import io.milvus.v2.service.collection.request.AddFieldReq;
 import io.milvus.v2.service.collection.request.CreateCollectionReq;
 import io.milvus.v2.service.utility.request.FlushReq;
+import io.milvus.v2.service.vector.request.DeleteReq;
+import io.milvus.v2.service.vector.request.GetReq;
 import io.milvus.v2.service.vector.request.InsertReq;
+import io.milvus.v2.service.vector.response.DeleteResp;
+import io.milvus.v2.service.vector.response.GetResp;
+import io.milvus.v2.service.vector.response.InsertResp;
+import io.milvus.v2.service.vector.response.QueryResp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +28,6 @@ public class MilvusCreateDemo {
     public static final String MILVUS_HOST = "http://192.168.80.129:19530";
     //设定常量存放Token信息
     public static final String TOKEN = "root:Milvus";
-
     //使用main进行功能测试
     public static void main(String[] args) {
         //通过构建方法，构建Milvus配置信息
@@ -34,8 +39,12 @@ public class MilvusCreateDemo {
         MilvusClientV2 clientV2 = new MilvusClientV2(connectConfig);
         //collection 名称
         String collectionName = "demo_collection";
+        //调用删除方法
+//        delete(clientV2, collectionName);
+        //调用查询方法
+//        query(clientV2, collectionName);
         //调用批量插入方法
-        insertBatch( clientV2, collectionName);
+//        insertBatch( clientV2, collectionName);
         //调用构建方法创建Collection
 //        createCollection(clientV2,collectionName);
         //获取Milvus中的所有集合
@@ -43,6 +52,30 @@ public class MilvusCreateDemo {
 //        System.out.println("Milvus中的所有集合：" + collectionNames);
 
     }
+
+    //构建删除方法
+    public static void delete(MilvusClientV2 clientV2, String collectionName) {
+        DeleteResp delete = clientV2.delete(
+                DeleteReq.builder() //构建删除请求
+                        .collectionName(collectionName) //要删除的集合名称
+                        .ids(List.of(1)) //要删除的id
+                        .build()
+        );
+    }
+    //构建查询方法
+    public static void query(MilvusClientV2 clientV2, String collectionName) {
+        GetResp getResp = clientV2.get(
+                GetReq.builder() //构建查询请求
+                        .collectionName(collectionName) //要查询的集合名称
+                        .outputFields(List.of("id", "color")) //指定返回的字段
+                        .ids(List.of(1, 2, 3)) //指定查询的id
+                        .build()
+        );
+        for (QueryResp.QueryResult queryResult : getResp.getGetResults()){
+            System.out.println(queryResult.toString());
+        }
+    }
+
     //构建方法。批量插入测试数据到Milvus中
     public static void insertBatch(MilvusClientV2 clientV2, String collectionName) {
         //构建测试数据，字段有 id：整型,vector：五维向量数据,color：带颜色标记的字符串 构建10条
@@ -60,7 +93,7 @@ public class MilvusCreateDemo {
                 gson.fromJson("{\"id\":10,\"vector\":[1.0,1.1,1.2,1.3,1.4],\"color\":\"#FF0000\"}", JsonObject.class)
         );
         //插入数据到Milvus中
-        clientV2.insert(
+        InsertResp insert = clientV2.insert(
                 InsertReq.builder()
                         .collectionName(collectionName)
                         .data(data)
