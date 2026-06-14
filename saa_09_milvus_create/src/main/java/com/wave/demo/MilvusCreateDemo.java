@@ -1,13 +1,18 @@
 package com.wave.demo;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.milvus.v2.client.ConnectConfig;
 import io.milvus.v2.client.MilvusClientV2;
 import io.milvus.v2.common.DataType;
 import io.milvus.v2.common.IndexParam;
 import io.milvus.v2.service.collection.request.AddFieldReq;
 import io.milvus.v2.service.collection.request.CreateCollectionReq;
+import io.milvus.v2.service.utility.request.FlushReq;
+import io.milvus.v2.service.vector.request.InsertReq;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 //编写Milvus相关demo
@@ -29,14 +34,52 @@ public class MilvusCreateDemo {
         MilvusClientV2 clientV2 = new MilvusClientV2(connectConfig);
         //collection 名称
         String collectionName = "demo_collection";
+        //调用批量插入方法
+        insertBatch( clientV2, collectionName);
         //调用构建方法创建Collection
-        createCollection(clientV2,collectionName);
+//        createCollection(clientV2,collectionName);
         //获取Milvus中的所有集合
-        List<String> collectionNames = clientV2.listCollections().getCollectionNames();
-        System.out.println("Milvus中的所有集合：" + collectionNames);
+//        List<String> collectionNames = clientV2.listCollections().getCollectionNames();
+//        System.out.println("Milvus中的所有集合：" + collectionNames);
 
     }
+    //构建方法。批量插入测试数据到Milvus中
+    public static void insertBatch(MilvusClientV2 clientV2, String collectionName) {
+        //构建测试数据，字段有 id：整型,vector：五维向量数据,color：带颜色标记的字符串 构建10条
+        Gson gson = new Gson();
+        List<JsonObject> data = Arrays.asList(
+                gson.fromJson("{\"id\":1,\"vector\":[0.1,0.2,0.3,0.4,0.5],\"color\":\"#FF0000\"}", JsonObject.class),
+                gson.fromJson("{\"id\":2,\"vector\":[0.2,0.3,0.4,0.5,0.6],\"color\":\"#00FF00\"}", JsonObject.class),
+                gson.fromJson("{\"id\":3,\"vector\":[0.3,0.4,0.5,0.6,0.7],\"color\":\"#0000FF\"}", JsonObject.class),
+                gson.fromJson("{\"id\":4,\"vector\":[0.4,0.5,0.6,0.7,0.8],\"color\":\"#FFFF00\"}", JsonObject.class),
+                gson.fromJson("{\"id\":5,\"vector\":[0.5,0.6,0.7,0.8,0.9],\"color\":\"#FF00FF\"}", JsonObject.class),
+                gson.fromJson("{\"id\":6,\"vector\":[0.6,0.7,0.8,0.9,1.0],\"color\":\"#00FFFF\"}", JsonObject.class),
+                gson.fromJson("{\"id\":7,\"vector\":[0.7,0.8,0.9,1.0,1.1],\"color\":\"#FF0000\"}", JsonObject.class),
+                gson.fromJson("{\"id\":8,\"vector\":[0.8,0.9,1.0,1.1,1.2],\"color\":\"#00FFFF\"}", JsonObject.class),
+                gson.fromJson("{\"id\":9,\"vector\":[0.9,1.0,1.1,1.2,1.3],\"color\":\"#00FFFF\"}", JsonObject.class),
+                gson.fromJson("{\"id\":10,\"vector\":[1.0,1.1,1.2,1.3,1.4],\"color\":\"#FF0000\"}", JsonObject.class)
+        );
+        //插入数据到Milvus中
+        clientV2.insert(
+                InsertReq.builder()
+                        .collectionName(collectionName)
+                        .data(data)
+                        .build()
+        );
+        //刷新数据,将插入的数据立刻生效
+        clientV2.flush(
+                FlushReq.builder()
+                        .collectionNames(List.of(collectionName))
+                        .build()
+        );
+        System.out.println("数据插入成功！");
+    }
 
+    /**
+     * 创建Collection
+     * @param clientV2
+     * @param collectionName
+     */
     private static void createCollection(MilvusClientV2 clientV2, String collectionName) {
         //构建Schema,collection的结构，
         CreateCollectionReq.CollectionSchema collectionSchema = MilvusClientV2.CreateSchema()
@@ -52,7 +95,7 @@ public class MilvusCreateDemo {
                         AddFieldReq.builder()
                                 .fieldName("vector") //字段名称
                                 .dataType(DataType.FloatVector) //字段类型，向量类型
-                                .dimension(5) //向量维度
+                                .dimension(1024) //向量维度
                                 .build()
                 )
                 .addField(
