@@ -43,8 +43,6 @@ public class MilvusDemoController {
         );
         //获取向量
         float[] output = embeddingResponse.getResult().getOutput();
-        JsonArray jsonArray = new JsonArray();
-
         milvusUtils.insert(List.of(new DemoMil(12,output,"#FFF999")));
         return "转换成功！";
     }
