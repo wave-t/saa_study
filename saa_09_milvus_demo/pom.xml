@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>saa_09_milvus_create</artifactId>
+    <artifactId>saa_09_milvus_demo</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
