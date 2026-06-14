@@ -14,6 +14,7 @@
         <module name="saa_02_ollama_demo" />
         <module name="saa_01_quickly" />
         <module name="saa_06_chat_memory02" />
+        <module name="saa_09_milvus_create" />
         <module name="saa_08_embedding" />
       </profile>
     </annotationProcessing>

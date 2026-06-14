@@ -17,6 +17,7 @@
         <module>saa_06_chat_memory02</module>
         <module>saa_07_text2image</module>
         <module>saa_08_embedding</module>
+        <module>saa_09_milvus_create</module>
     </modules>
 
     <properties>
