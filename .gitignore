@@ -1,7 +1,11 @@
 # 项目排除路径
+/saa_01_quickly/target/
 /saa_02_ollama_demo/target/
 /saa_03_chatclient_demo/target/
 /saa_04_prompt_demo/target/
 /saa_05_chat_memory01/target/
 /saa_06_chat_memory02/target/
 /saa_07_text2image/target/
+/saa_08_embedding/target/
+/saa_09_milvus_demo/target/
+/saa_10_rag_demo/target/

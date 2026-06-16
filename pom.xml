@@ -18,6 +18,7 @@
         <module>saa_07_text2image</module>
         <module>saa_08_embedding</module>
         <module>saa_09_milvus_demo</module>
+        <module>saa_10_rag_demo</module>
     </modules>
 
     <properties>
